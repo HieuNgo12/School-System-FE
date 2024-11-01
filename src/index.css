@@ -1,0 +1,10 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+th {
+  margin-right: 16px;
+}
+.error-field{
+  color: red;
+}
