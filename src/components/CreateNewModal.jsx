@@ -10,6 +10,9 @@ import "./CreateNewModal.css";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import axios from "axios";
+import SelectWithCheckBox from "./SelectWithCheckbox/SelectWithCheckbox";
+import HocViTable from "./HocViTable/HocViTable";
 const SignupSchema = Yup.object().shape({
   name: Yup.string()
     .min(2, "Required at least 2 letters")
@@ -22,19 +25,28 @@ const SignupSchema = Yup.object().shape({
 
   email: Yup.string().required("Email is Required").email("Invalid email"),
 });
-function CreateNewModal({ open, setOpen, ...props }) {
+function CreateNewModal({ teacherPositionList, open, setOpen, ...props }) {
+  const [selectList, setSelectList] = useState([]);
+
   const formik = useFormik({
     initialValues: {
       name: "",
       dob: "",
-      phoneNumber: "",
-      apartment: "",
       phoneNumber: "",
       email: "",
     },
     validationSchema: SignupSchema,
     onSubmit: async (values) => {
       console.log(values);
+      l
+      const response = await axios.post("http://localhost:8080/teachers", {
+        name: values.name,
+
+        dob: values.dob,
+        phoneNumber: values.phoneNumber,
+        email: values.email,
+        teacherPositionsId: selectList?.optionSelected,
+      });
       // return redirect("");
 
       // setSuccess(true);
@@ -42,47 +54,46 @@ function CreateNewModal({ open, setOpen, ...props }) {
   });
   return (
     <Dialog open={open} onClose={setOpen} className="relative z-10">
-                                <form onSubmit={formik.handleSubmit}>
+      <form onSubmit={formik.handleSubmit}>
+        <DialogBackdrop
+          transition
+          className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity data-[closed]:opacity-0 data-[enter]:duration-300 data-[leave]:duration-200 data-[enter]:ease-out data-[leave]:ease-in"
+        />
 
-      <DialogBackdrop
-        transition
-        className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity data-[closed]:opacity-0 data-[enter]:duration-300 data-[leave]:duration-200 data-[enter]:ease-out data-[leave]:ease-in"
-      />
-
-      <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
-        <div className="flex  items-end justify-center p-4 items-center text-center sm:items-center sm:p-0">
-          <DialogPanel transition className="create-new-user-modal relative ">
-            <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
-              <div className="sm:flex sm:items-start">
-                <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
-                  <div className="flex">
-                    <div style={{ marginRight: "12px" }}>
-                      <img
-                        src="./profileImage.jpg"
-                        style={{
-                          width: "100%",
-                          height: "100%",
-                        }}
-                      />
-                    </div>
-                    <div>
-                      <DialogTitle
-                        as="h3"
-                        className="text-base font-semibold text-gray-900"
-                      >
-                        Tạo thông tin giáo viên
-                      </DialogTitle>
-                      <div className="mt-2">
-                        <p
-                          className="text-sm text-gray-500"
+        <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
+          <div className="flex  items-end justify-center p-4 items-center text-center sm:items-center sm:p-0">
+            <DialogPanel transition className="create-new-user-modal relative ">
+              <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+                <div className="sm:flex sm:items-start">
+                  <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
+                    <div className="flex">
+                      <div style={{ marginRight: "12px" }}>
+                        <img
+                          src="./profileImage.jpg"
                           style={{
-                            fontWeight: "bold",
-                            fontSize: "16px",
-                            marginBottom: "16px",
+                            width: "100%",
+                            height: "100%",
                           }}
+                        />
+                      </div>
+                      <div>
+                        <DialogTitle
+                          as="h3"
+                          className="text-base font-semibold text-gray-900"
                         >
-                          Thông tin cá nhân
-                        </p>
+                          Tạo thông tin giáo viên
+                        </DialogTitle>
+                        <div className="mt-2">
+                          <p
+                            className="text-sm text-gray-500"
+                            style={{
+                              fontWeight: "bold",
+                              fontSize: "16px",
+                              marginBottom: "16px",
+                            }}
+                          >
+                            Thông tin cá nhân
+                          </p>
                           <div className="flex">
                             <div>
                               <div>Họ và Tên</div>
@@ -256,36 +267,48 @@ function CreateNewModal({ open, setOpen, ...props }) {
                               </div>
                             </div>
                           </div>
+                        </div>
+                      </div>
+
+                      <div>
+                        <div>Thông tin công tác</div>
+                        {teacherPositionList.length ? (
+                          <SelectWithCheckBox
+                            list={selectList}
+                            setList={setSelectList}
+                            teacherPositionList={teacherPositionList}
+                          />
+                        ) : null}{" "}
                       </div>
                     </div>
+                    
+                    <div className="ml-10">
+                        <div>Học vị</div>
+                        <HocViTable />
+                      </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
-              <button
-                type="submit"
-                onClick={() => {}}
-                className="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto"
-              >
-                Lưu
-              </button>
-              <button
-                type="submit"
-                onClick={() => setOpen(false)}
-                className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
-              >
-                Cancel
-              </button>
-            </div>
-            
-          </DialogPanel>
-          
+              <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+                <button
+                  type="submit"
+                  onClick={() => {}}
+                  className="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto"
+                >
+                  Lưu
+                </button>
+                <button
+                  type="submit"
+                  onClick={() => setOpen(false)}
+                  className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
+                >
+                  Cancel
+                </button>
+              </div>
+            </DialogPanel>
+          </div>
         </div>
-        
-      </div>
-                              </form>
-
+      </form>
     </Dialog>
   );
 }

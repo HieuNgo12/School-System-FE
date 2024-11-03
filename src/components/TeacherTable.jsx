@@ -1,16 +1,14 @@
 import React, { useEffect } from "react";
 import ReactPaginate from "react-paginate";
 
-function TeacherTable({ teacherList, ...props }) {
-
-
+function TeacherTable({ teacherList, teacherPositionList, ...props }) {
   useEffect(() => {
     console.log(teacherList);
   }, []);
   return (
-    <div class="relative overflow-x-auto">
+    <div class="relative overflow-x-auto bg-slate-200 p-12 ">
       <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+        <thead class="text-xs text-gray-700 uppercase bg-purple-100 dark:bg-gray-700 dark:text-gray-400">
           <tr>
             <th scope="col" class="px-12 py-3 w-16">
               Mã
@@ -50,7 +48,6 @@ function TeacherTable({ teacherList, ...props }) {
                   {teacher.code}
                 </th>
                 <td class="px-6 py-4">{teacher.userId.name}</td>
-                <td class="px-6 py-4">{teacher.degrees[0].major}</td>
                 <td class="px-6 py-4">
                   <div>
                     <b>Bậc:</b> {teacher.degrees[0].school}
@@ -66,17 +63,29 @@ function TeacherTable({ teacherList, ...props }) {
                 <td class="px-6 py-4">{teacher.userId.address}</td>
 
                 <td class="px-6 py-4">
-                  {teacher.isActive ? "Đang hoạt động" : "Ngưng hoạt động"}
+                  <div
+                    className="bg-green-300 "
+                    style={{ borderRadius: "9px", padding: "9px" }}
+                  >
+                    {teacher.isActive ? "Đang công tác" : "Ngưng hoạt động"}
+                  </div>
                 </td>
                 <td class="px-6 py-4">
-                  <button>Chi tiết</button>
+                  <button
+                    style={{
+                      border: "1px solid black",
+                      padding: "6px",
+                      fontSize: "12px",
+                    }}
+                  >
+                    Chi tiết
+                  </button>
                 </td>
               </tr>
             </tbody>
           );
         })}
       </table>
-
       ;
     </div>
   );

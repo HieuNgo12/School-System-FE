@@ -9,6 +9,8 @@ import TeacherPositionTable from "./components/TeacherPositionTable";
 import axios from "axios";
 import ReactPaginate from "react-paginate";
 import CreateNewModal from "./components/CreateNewModal";
+import LeftTabPanel from "./components/LeftTabPanel";
+import CreateNewPositionModal from "./components/CreateNewPositionModal";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -19,6 +21,8 @@ function App() {
   const [orgList, setOrgList] = useState([]);
   const itemsPerPage = 10;
   const [openModal, setOpenModal] = useState(false);
+  const [openPositionModal, setOpenPositionModal] = useState(false);
+
   useEffect(() => {
     const getTeacher = async () => {
       const originalList = await axios.get(`http://localhost:8080/teachers`);
@@ -55,12 +59,15 @@ function App() {
     // setLoading(true);
     setCurrentPage(selected);
   };
-  return (
-    <>
-      <div className="text-left">
-        <Navbar />
-        <CreateNewModal open={openModal} setOpen={setOpenModal} />
-        <div className="flex" style={{ marginLeft: "75%" }}>
+
+  const firstTab = () => {
+    return (
+      <>
+        {" "}
+        <div
+          className="flex"
+          style={{ marginLeft: "65%", marginBottom: "10px" }}
+        >
           <input
             placeholder="Tìm kiếm thông tin"
             style={{
@@ -70,34 +77,27 @@ function App() {
               marginRight: "12px",
             }}
           />
-          <button
-            style={{
-              border: "1px solid black",
-              borderRadius: "5%",
-              padding: "6px",
-              marginRight: "12px",
-            }}
-          >
+          <Button variant="outlined" className="mr-6">
             Tải lại
-          </button>
-          <button
-            style={{
-              border: "1px solid black",
-              borderRadius: "5%",
-              padding: "6px",
-              marginRight: "12px",
-            }}
-            onClick={()=>{
-              setOpenModal(true)
+          </Button>
+          <Button
+            variant="contained"
+            style={{ marginLeft: "6px" }}
+            onClick={() => {
+              setOpenModal(true);
             }}
           >
             Tạo mới
-          </button>
+          </Button>
         </div>
-
-        {teacherList.length ? <TeacherTable teacherList={teacherList} /> : null}
-        <div className="flex">
-          <div style={{ marginLeft: "70%" }}>Total: {orgList.length}</div>
+        {teacherList.length ? (
+          <TeacherTable
+            teacherList={teacherList}
+            teacherPositionList={teacherPositionList}
+          />
+        ) : null}
+        <div className="flex mt-16">
+          <div style={{ marginLeft: "55%" }}>Total: {orgList.length}</div>
           <ReactPaginate
             previousLabel={"previous"}
             nextLabel={"next"}
@@ -112,9 +112,57 @@ function App() {
             activeClassName={"active"}
           />
         </div>
+      </>
+    );
+  };
+  const secondTab = () => {
+    return (
+      <>
+        <div
+          className="flex"
+          style={{ marginLeft: "45%", marginBottom: "10px" }}
+        >
+          <input
+            placeholder="Tìm kiếm thông tin"
+            style={{
+              border: "1px solid black",
+              borderRadius: "5%",
+              padding: "6px",
+              marginRight: "12px",
+            }}
+          />
+          <Button variant="outlined" className="mr-6">
+            Tải lại
+          </Button>
+          <Button
+            variant="contained"
+            style={{ marginLeft: "6px" }}
+            onClick={() => {
+              setOpenPositionModal(true);
+            }}
+          >
+            Tạo mới
+          </Button>
+        </div>
         {teacherPositionList.length ? (
           <TeacherPositionTable teacherPositionList={teacherPositionList} />
         ) : null}
+      </>
+    );
+  };
+  return (
+    <>
+      <div className="text-left">
+        <Navbar />
+        {teacherPositionList.length ? (
+          <CreateNewModal
+            open={openModal}
+            setOpen={setOpenModal}
+            teacherPositionList={teacherPositionList}
+          />
+        ) : null}
+        <CreateNewPositionModal open={openPositionModal} setOpen={setOpenPositionModal}/>
+        <LeftTabPanel firstTab={firstTab} secondTab={secondTab} />
       </div>
     </>
   );

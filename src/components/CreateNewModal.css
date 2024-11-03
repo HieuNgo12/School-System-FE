@@ -2,3 +2,7 @@
     width: 100% !important;
     height: 100%;
 }
+
+.hover-button:hover{
+    cursor: pointer;
+}
