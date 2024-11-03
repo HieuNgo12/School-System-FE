@@ -16,7 +16,7 @@ import HocViTable from "./HocViTable/HocViTable";
 const SignupSchema = Yup.object().shape({
   name: Yup.string().required("First Name Is Required"),
   des: Yup.string().required("Date Of Birth is Required"),
-  code: Yup.number().required("Required"),
+  code: Yup.string().required("Required"),
 });
 function CreateNewPositionModal({
   teacherPositionList,

@@ -27,6 +27,7 @@ const SignupSchema = Yup.object().shape({
 });
 function CreateNewModal({ teacherPositionList, open, setOpen, ...props }) {
   const [selectList, setSelectList] = useState([]);
+  const [majorSelectState, setMajorSelectState] = useState({ optionSelected: null });
 
   const formik = useFormik({
     initialValues: {
@@ -38,15 +39,17 @@ function CreateNewModal({ teacherPositionList, open, setOpen, ...props }) {
     validationSchema: SignupSchema,
     onSubmit: async (values) => {
       console.log(values);
-      l
+      console.log(majorSelectState);
       const response = await axios.post("http://localhost:8080/teachers", {
         name: values.name,
 
         dob: values.dob,
         phoneNumber: values.phoneNumber,
         email: values.email,
-        teacherPositionsId: selectList?.optionSelected,
+        teacherPositionsId: majorSelectState?.optionSelected,
+
       });
+
       // return redirect("");
 
       // setSuccess(true);
@@ -277,6 +280,8 @@ function CreateNewModal({ teacherPositionList, open, setOpen, ...props }) {
                             list={selectList}
                             setList={setSelectList}
                             teacherPositionList={teacherPositionList}
+                            state={majorSelectState}
+                            setState={setMajorSelectState}
                           />
                         ) : null}{" "}
                       </div>

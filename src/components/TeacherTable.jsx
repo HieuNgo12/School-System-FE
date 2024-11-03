@@ -3,7 +3,7 @@ import ReactPaginate from "react-paginate";
 
 function TeacherTable({ teacherList, teacherPositionList, ...props }) {
   useEffect(() => {
-    console.log(teacherList);
+    console?.log(teacherList);
   }, []);
   return (
     <div class="relative overflow-x-auto bg-slate-200 p-12 ">
@@ -36,7 +36,7 @@ function TeacherTable({ teacherList, teacherPositionList, ...props }) {
             </th>
           </tr>
         </thead>
-        {teacherList.map((teacher) => {
+        {teacherList?.map((teacher) => {
           return (
             <tbody>
               {" "}
@@ -45,29 +45,29 @@ function TeacherTable({ teacherList, teacherPositionList, ...props }) {
                   scope="row"
                   class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                 >
-                  {teacher.code}
+                  {teacher?.code}
                 </th>
-                <td class="px-6 py-4">{teacher.userId.name}</td>
+                <td class="px-6 py-4">{teacher?.userId?.name}</td>
                 <td class="px-6 py-4">
                   <div>
-                    <b>Bậc:</b> {teacher.degrees[0].school}
+                    <b>Bậc:</b> {teacher?.degrees[0]?.school}
                   </div>
                   <div>
                     <b>Chuyên Ngành: </b>
-                    {teacher.degrees[0].major}
+                    {teacher?.degrees[0]?.major}
                   </div>
                 </td>
 
                 <td class="px-6 py-4">N/A</td>
-                <td class="px-6 py-4">{teacher.teacherPositionsId[0].name}</td>
-                <td class="px-6 py-4">{teacher.userId.address}</td>
+                <td class="px-6 py-4">{teacher?.teacherPositionsId[0]?.name}</td>
+                <td class="px-6 py-4">{teacher?.userId?.address}</td>
 
                 <td class="px-6 py-4">
                   <div
                     className="bg-green-300 "
                     style={{ borderRadius: "9px", padding: "9px" }}
                   >
-                    {teacher.isActive ? "Đang công tác" : "Ngưng hoạt động"}
+                    {teacher?.isActive ? "Đang công tác" : "Ngưng hoạt động"}
                   </div>
                 </td>
                 <td class="px-6 py-4">

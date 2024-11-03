@@ -22,6 +22,7 @@ function App() {
   const itemsPerPage = 10;
   const [openModal, setOpenModal] = useState(false);
   const [openPositionModal, setOpenPositionModal] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const getTeacher = async () => {
@@ -45,7 +46,7 @@ function App() {
 
     getTeacher();
     getTeacherPosition();
-  }, []);
+  }, [loading]);
   useEffect(() => {
     const getTeacherByPage = async () => {
       const teacher = await axios.get(
@@ -77,7 +78,7 @@ function App() {
               marginRight: "12px",
             }}
           />
-          <Button variant="outlined" className="mr-6">
+          <Button variant="outlined" className="mr-6" onClick={()=>{setLoading(!loading)}}>
             Tải lại
           </Button>
           <Button
@@ -131,7 +132,7 @@ function App() {
               marginRight: "12px",
             }}
           />
-          <Button variant="outlined" className="mr-6">
+          <Button variant="outlined" className="mr-6" onClick={()=>{setLoading(!loading)}}>
             Tải lại
           </Button>
           <Button
@@ -161,7 +162,10 @@ function App() {
             teacherPositionList={teacherPositionList}
           />
         ) : null}
-        <CreateNewPositionModal open={openPositionModal} setOpen={setOpenPositionModal}/>
+        <CreateNewPositionModal
+          open={openPositionModal}
+          setOpen={setOpenPositionModal}
+        />
         <LeftTabPanel firstTab={firstTab} secondTab={secondTab} />
       </div>
     </>

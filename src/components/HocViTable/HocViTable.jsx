@@ -9,7 +9,9 @@ const dataSource = [
     id: "1",
     name: "Bậc",
     school: "Đh",
-    assists: 10,
+    graduation: "",
+    status: false,
+    major: ""
   },
 ];
 
@@ -27,9 +29,12 @@ const EditableTable = () => {
 
   const onInputChange = (key, index) => (e) => {
     const newData = [...tableData];
-    newData[index][key] = Number(e.target.value);
+
+    newData[index][key] = e.target.value;
     setTotal(newData, index);
     setTableData(newData);
+    console.log(tableData);
+
   };
 
   const setTotal = (data, index) => {
@@ -54,10 +59,7 @@ const EditableTable = () => {
   ];
 
   const columns = [
-    {
-      dataIndex: "name",
-      title: "",
-    },
+    
     {
       dataIndex: "level",
       title: "Bậc",
@@ -65,7 +67,8 @@ const EditableTable = () => {
         <>
           <select name="cars" id="cars">
             {levels.map((level) => {
-              return <option value={levels.value}>{levels.label}</option>;
+              
+              return <option value={level.value}>{level.label}</option>;
             })}
           </select>
         </>
@@ -90,7 +93,7 @@ const EditableTable = () => {
       title: "Trạng Thái",
       render: (text, record, index) => (
         <div className="flex">
-          <input type="checkbox" onChange={onInputChange("major", index)} />
+          <input type="checkbox" onChange={onInputChange("status", index)} />
 
           <div>Hoàn Thành</div>
         </div>
@@ -100,7 +103,7 @@ const EditableTable = () => {
       dataIndex: "graduation",
       title: "Tốt Nghiệp",
       render: (text, record, index) => (
-        <Input value={text} onChange={onInputChange("assists", index)} />
+        <Input value={text} onChange={onInputChange("graduation", index)} />
       ),
     },
   ];
