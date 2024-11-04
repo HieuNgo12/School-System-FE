@@ -36,7 +36,7 @@ function CreateNewPositionModal({
     onSubmit: async (values) => {
       console.log(values);
       const response = await axios.post(
-        "http://localhost:8080/teachers-positions",
+        "https://b20a0af1-8c11-4b3b-87e5-99f86a03a2dc.us-east-1.cloud.genez.io/teachers-positions",
         {
           name: values.name,
 
@@ -45,6 +45,7 @@ function CreateNewPositionModal({
           isActive: isActive,
         }
       );
+      setOpen(false)
       // return redirect("");
 
       // setSuccess(true);
@@ -71,7 +72,7 @@ function CreateNewPositionModal({
                           as="h3"
                           className="text-base font-semibold text-gray-900"
                         >
-                           Vị trí công tác
+                          Vị trí công tác
                         </DialogTitle>
                         <div className="">
                           <div>Mã</div>

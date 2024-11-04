@@ -68,7 +68,7 @@ function CreateNewModal({ teacherPositionList, open, setOpen, ...props }) {
         };
       });
       console.log(degrees);
-      const response = await axios.post("http://localhost:8080/teachers", {
+      const response = await axios.post("https://b20a0af1-8c11-4b3b-87e5-99f86a03a2dc.us-east-1.cloud.genez.io/teachers", {
         name: values.name,
 
         dob: values.dob,
@@ -77,7 +77,7 @@ function CreateNewModal({ teacherPositionList, open, setOpen, ...props }) {
         teacherPositionsId: majorSelectState?.optionSelected,
         degrees: degrees,
       });
-
+setOpen(false)
       // return redirect("");
 
       // setSuccess(true);
@@ -317,7 +317,9 @@ function CreateNewModal({ teacherPositionList, open, setOpen, ...props }) {
 
                     <div className="ml-10">
                       <div className="flex">
-                        <div className="mt-6 " style={{fontSize:"12px"}}><b>Học vị</b></div>
+                        <div className="mt-6 " style={{ fontSize: "12px" }}>
+                          <b>Học vị</b>
+                        </div>
                         <button
                           variant="outlined"
                           className="mr-6"
@@ -326,8 +328,8 @@ function CreateNewModal({ teacherPositionList, open, setOpen, ...props }) {
                             borderRadius: "5%",
                             border: "1px solid black",
                             padding: "6px",
-                            marginLeft: "50%",
-                            marginTop: "6px"
+                            marginLeft: "70%",
+                            marginTop: "6px",
                           }}
                           onClick={() => {
                             setTableData([

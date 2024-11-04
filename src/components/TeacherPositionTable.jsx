@@ -40,8 +40,8 @@ function TeacherPositionTable({ teacherPositionList, ...props }) {
                 <td class="px-6 py-4">{teacherPosition.code}</td>
                 <td class="px-6 py-4">{teacherPosition.name}</td>
                 <td class="px-6 py-4">
-                  <div className="bg-green-500" style={{ borderRadius: "10%", padding: "9px" }}>
-                    {teacherPosition.isActive ? "Hoạt Động" : null}
+                  <div  style={teacherPosition.isActive  ?{ borderRadius: "10%", padding: "9px",backgroundColor: "green" }: { borderRadius: "10%", padding: "9px",backgroundColor: "red" }}>
+                    {teacherPosition.isActive ? "Hoạt Động" : "Ngưng Hoạt Động"}
                   </div>
                 </td>
                 <td class="px-6 py-4">{teacherPosition.des}</td>
