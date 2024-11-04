@@ -13,6 +13,7 @@ import * as Yup from "yup";
 import axios from "axios";
 import SelectWithCheckBox from "./SelectWithCheckbox/SelectWithCheckbox";
 import HocViTable from "./HocViTable/HocViTable";
+import { Button } from "flowbite-react";
 const SignupSchema = Yup.object().shape({
   name: Yup.string()
     .min(2, "Required at least 2 letters")
@@ -25,9 +26,24 @@ const SignupSchema = Yup.object().shape({
 
   email: Yup.string().required("Email is Required").email("Invalid email"),
 });
+const dataSource = [
+  {
+    id: "1",
+
+    name: "Bậc",
+    school: "Đh",
+    graduation: "",
+    status: "",
+    major: "",
+    type: "",
+  },
+];
 function CreateNewModal({ teacherPositionList, open, setOpen, ...props }) {
   const [selectList, setSelectList] = useState([]);
-  const [majorSelectState, setMajorSelectState] = useState({ optionSelected: null });
+  const [majorSelectState, setMajorSelectState] = useState({
+    optionSelected: null,
+  });
+  const [tableData, setTableData] = useState(dataSource);
 
   const formik = useFormik({
     initialValues: {
@@ -40,6 +56,18 @@ function CreateNewModal({ teacherPositionList, open, setOpen, ...props }) {
     onSubmit: async (values) => {
       console.log(values);
       console.log(majorSelectState);
+      console.log(tableData);
+      const degrees = tableData.map((data) => {
+        console.log(data);
+        return {
+          type: data?.type,
+          school: data?.school,
+          major: data?.major,
+          year: data?.graduation,
+          isGraduated: data?.status === "on" ? true : false,
+        };
+      });
+      console.log(degrees);
       const response = await axios.post("http://localhost:8080/teachers", {
         name: values.name,
 
@@ -47,7 +75,7 @@ function CreateNewModal({ teacherPositionList, open, setOpen, ...props }) {
         phoneNumber: values.phoneNumber,
         email: values.email,
         teacherPositionsId: majorSelectState?.optionSelected,
-
+        degrees: degrees,
       });
 
       // return redirect("");
@@ -286,18 +314,50 @@ function CreateNewModal({ teacherPositionList, open, setOpen, ...props }) {
                         ) : null}{" "}
                       </div>
                     </div>
-                    
+
                     <div className="ml-10">
-                        <div>Học vị</div>
-                        <HocViTable />
+                      <div className="flex">
+                        <div className="mt-6 " style={{fontSize:"12px"}}><b>Học vị</b></div>
+                        <button
+                          variant="outlined"
+                          className="mr-6"
+                          style={{
+                            background: "white",
+                            borderRadius: "5%",
+                            border: "1px solid black",
+                            padding: "6px",
+                            marginLeft: "50%",
+                            marginTop: "6px"
+                          }}
+                          onClick={() => {
+                            setTableData([
+                              ...tableData,
+                              {
+                                id: tableData.length + 1,
+
+                                name: "",
+                                school: "",
+                                graduation: "",
+                                status: "",
+                                major: "",
+                              },
+                            ]);
+                          }}
+                        >
+                          Thêm Học Vị
+                        </button>
                       </div>
+                      <HocViTable
+                        tableData={tableData}
+                        setTableData={setTableData}
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
               <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
                 <button
                   type="submit"
-                  onClick={() => {}}
                   className="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto"
                 >
                   Lưu

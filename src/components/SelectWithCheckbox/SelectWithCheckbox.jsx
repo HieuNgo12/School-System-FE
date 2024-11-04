@@ -15,7 +15,7 @@ const Option = (props) => {
       </components.Option>
     </div>
   );
-};
+}
 
 function SelectWithCheckBox({ list, setList, state,setState,teacherPositionList, ...props }) {
   const handleChange = (selected) => {

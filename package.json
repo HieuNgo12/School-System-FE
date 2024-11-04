@@ -28,7 +28,7 @@
     "@reduxjs/toolkit": "^2.2.8",
     "@toolpad/core": "^0.8.1",
     "@types/react-router-dom": "^5.3.3",
-    "antd": "3.26.8",
+    "antd": "^3.26.8",
     "apexcharts": "^3.52.0",
     "axios": "^1.7.4",
     "cloudinary": "^2.5.1",

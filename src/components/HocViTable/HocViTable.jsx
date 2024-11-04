@@ -3,21 +3,10 @@ import { Input, Table, Button } from "antd";
 import { useState, useEffect } from "react";
 import { ColumnProps } from "antd/lib/table";
 import { render } from "react-dom";
+import "antd/dist/antd.css";
+import Select from "react-select";
 
-const dataSource = [
-  {
-    id: "1",
-    name: "Bậc",
-    school: "Đh",
-    graduation: "",
-    status: false,
-    major: ""
-  },
-];
-
-const EditableTable = () => {
-  const [tableData, setTableData] = useState(dataSource);
-
+const EditableTable = ({ tableData, setTableData, ...props }) => {
   useEffect(() => {
     // Set totals on initial render
     const newData = [...tableData];
@@ -29,14 +18,18 @@ const EditableTable = () => {
 
   const onInputChange = (key, index) => (e) => {
     const newData = [...tableData];
+    console.log(e.target.value);
 
     newData[index][key] = e.target.value;
     setTotal(newData, index);
     setTableData(newData);
     console.log(tableData);
-
   };
-
+  const options = [
+    { value: "chocolate", label: "Chocolate" },
+    { value: "strawberry", label: "Strawberry" },
+    { value: "vanilla", label: "Vanilla" },
+  ];
   const setTotal = (data, index) => {
     // Set total
     data[index]["totalCount"] = Number(
@@ -59,20 +52,28 @@ const EditableTable = () => {
   ];
 
   const columns = [
-    
     {
-      dataIndex: "level",
-      title: "Bậc",
+      dataIndex: "name",
+      title: "",
       render: (text, record, index) => (
         <>
-          <select name="cars" id="cars">
-            {levels.map((level) => {
-              
-              return <option value={level.value}>{level.label}</option>;
-            })}
-          </select>
+          <input type="checkbox" />
         </>
       ),
+    },
+    {
+      dataIndex: "type",
+      title: "Bậc",
+      render: (text, record, index) => {
+        console.log(text);
+        return (
+          <select name="type" id="type" onChange={onInputChange("type", index)}>
+            {levels.map((level) => {
+              return <option value={level.label}>{level.label}</option>;
+            })}
+          </select>
+        );
+      },
     },
     {
       dataIndex: "school",
@@ -105,6 +106,10 @@ const EditableTable = () => {
       render: (text, record, index) => (
         <Input value={text} onChange={onInputChange("graduation", index)} />
       ),
+    },
+    {
+      title: "Xóa",
+      render: (text, record, index) => <button>Delete</button>,
     },
   ];
 
