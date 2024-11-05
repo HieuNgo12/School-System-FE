@@ -47,7 +47,16 @@ function TeacherTable({ teacherList, teacherPositionList, ...props }) {
                 >
                   {teacher?.code}
                 </th>
-                <td class="px-6 py-4">{teacher?.userId?.name}</td>
+                <td class="px-6 py-4">
+                  <div className="flex">
+                    <div>
+                      <img src="./profileImage.jpg"
+                      style={{width: "45px",height:"45px"}}
+                        />
+                    </div>
+                    <div>{ teacher?.userId?.name}</div>
+                  </div>
+                </td>
                 <td class="px-6 py-4">
                   <div>
                     <b>Bậc:</b> {teacher?.degrees[0]?.school}
@@ -59,13 +68,14 @@ function TeacherTable({ teacherList, teacherPositionList, ...props }) {
                 </td>
 
                 <td class="px-6 py-4">N/A</td>
-                <td class="px-6 py-4">{teacher?.teacherPositionsId[0]?.name}</td>
+                <td class="px-6 py-4">
+                  {teacher?.teacherPositionsId[0]?.name}
+                </td>
                 <td class="px-6 py-4">{teacher?.userId?.address}</td>
 
                 <td class="px-6 py-4">
                   <div
-                    className="bg-green-300 "
-                    style={{ borderRadius: "9px", padding: "9px" }}
+                    style={teacher?.isActive ?{ borderRadius: "9px", padding: "9px" ,backgroundColor:"green",color:"white"} :{ borderRadius: "9px", padding: "9px" ,backgroundColor:"red",color: "white"}  }
                   >
                     {teacher?.isActive ? "Đang công tác" : "Ngưng hoạt động"}
                   </div>

@@ -13,10 +13,13 @@ import * as Yup from "yup";
 import axios from "axios";
 import SelectWithCheckBox from "./SelectWithCheckbox/SelectWithCheckbox";
 import HocViTable from "./HocViTable/HocViTable";
+import url from "../url";
+import { ToastContainer, toast } from "react-toastify";
+// import { v2 as cloudinary } from "cloudinary";
 const SignupSchema = Yup.object().shape({
-  name: Yup.string().required("First Name Is Required"),
-  des: Yup.string().required("Date Of Birth is Required"),
-  code: Yup.string().required("Required"),
+  name: Yup.string().required(" Name Is Required"),
+  des: Yup.string().required("Description is Required"),
+  code: Yup.string().required("Code is Required"),
 });
 function CreateNewPositionModal({
   teacherPositionList,
@@ -35,17 +38,39 @@ function CreateNewPositionModal({
     validationSchema: SignupSchema,
     onSubmit: async (values) => {
       console.log(values);
-      const response = await axios.post(
-        "https://b20a0af1-8c11-4b3b-87e5-99f86a03a2dc.us-east-1.cloud.genez.io/teachers-positions",
-        {
+
+      const response = await axios
+        .post(`${url}/teachers-positions`, {
           name: values.name,
 
           des: values.des,
           code: values.code,
           isActive: isActive,
-        }
-      );
-      setOpen(false)
+        })
+        .then(() => {
+          toast.success("Successfully created teacher position", {
+            position: "top-center",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: false,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+        })
+        .catch((e) => {
+          toast.error("Duplicate Code", {
+            position: "top-center",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: false,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+        });
       // return redirect("");
 
       // setSuccess(true);
@@ -53,6 +78,7 @@ function CreateNewPositionModal({
   });
   return (
     <Dialog open={open} onClose={setOpen} className="relative z-10">
+      <ToastContainer />
       <form onSubmit={formik.handleSubmit}>
         <DialogBackdrop
           transition
@@ -91,6 +117,14 @@ function CreateNewPositionModal({
                             value={formik.values.code}
                           />
                         </div>
+                        <div className="flex">
+                          <div className="error-field ">
+                            {" "}
+                            {formik.errors.code && (
+                              <div>{formik.errors.code}</div>
+                            )}
+                          </div>
+                        </div>
                         <div>
                           <div>Tên</div>
                           <input
@@ -108,6 +142,14 @@ function CreateNewPositionModal({
                             value={formik.values.name}
                           />
                         </div>
+                        <div className="flex">
+                          <div className="error-field ">
+                            {" "}
+                            {formik.errors.name && (
+                              <div>{formik.errors.name}</div>
+                            )}
+                          </div>
+                        </div>
                         <div>
                           <div>Mô tả</div>
                           <input
@@ -124,6 +166,14 @@ function CreateNewPositionModal({
                             onChange={formik.handleChange}
                             value={formik.values.des}
                           />
+                        </div>
+                        <div className="flex">
+                          <div className="error-field ">
+                            {" "}
+                            {formik.errors.des && (
+                              <div>{formik.errors.des}</div>
+                            )}
+                          </div>
                         </div>
                         <div>
                           <div>Trạng Thái</div>

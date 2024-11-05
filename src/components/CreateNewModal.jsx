@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import {
   Dialog,
@@ -14,6 +14,11 @@ import axios from "axios";
 import SelectWithCheckBox from "./SelectWithCheckbox/SelectWithCheckbox";
 import HocViTable from "./HocViTable/HocViTable";
 import { Button } from "flowbite-react";
+import url from "../url";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { FileUploader } from "react-drag-drop-files";
+
 const SignupSchema = Yup.object().shape({
   name: Yup.string()
     .min(2, "Required at least 2 letters")
@@ -31,53 +36,86 @@ const dataSource = [
     id: "1",
 
     name: "Bậc",
-    school: "Đh",
+    school: "",
     graduation: "",
     status: "",
     major: "",
+    isChecked: false,
     type: "",
   },
 ];
+const fileTypes = ["JPG", "PNG", "GIF"];
+
 function CreateNewModal({ teacherPositionList, open, setOpen, ...props }) {
   const [selectList, setSelectList] = useState([]);
   const [majorSelectState, setMajorSelectState] = useState({
     optionSelected: null,
   });
-  const [tableData, setTableData] = useState(dataSource);
+  const [file, setFile] = useState(null);
 
+  const [tableData, setTableData] = useState(dataSource);
+  const notify = () => toast("Wow so easy!");
+  const handleFileChange = (file) => {
+    setFile(file);
+  };
   const formik = useFormik({
     initialValues: {
       name: "",
       dob: "",
       phoneNumber: "",
       email: "",
+      address: "",
     },
     validationSchema: SignupSchema,
     onSubmit: async (values) => {
-      console.log(values);
-      console.log(majorSelectState);
-      console.log(tableData);
       const degrees = tableData.map((data) => {
         console.log(data);
-        return {
-          type: data?.type,
-          school: data?.school,
-          major: data?.major,
-          year: data?.graduation,
-          isGraduated: data?.status === "on" ? true : false,
-        };
+        if (data?.isChecked === true) {
+          return {
+            type: data?.type,
+            school: data?.school,
+            major: data?.major,
+            year: data?.graduation,
+            isGraduated: data?.status === "on" ? true : false,
+          };
+        }
       });
-      console.log(degrees);
-      const response = await axios.post("https://b20a0af1-8c11-4b3b-87e5-99f86a03a2dc.us-east-1.cloud.genez.io/teachers", {
-        name: values.name,
+      const response = await axios
+        .post(`${url}/teachers`, {
+          name: values.name,
+          address: values.address,
+          dob: values.dob,
+          phoneNumber: values.phoneNumber,
+          email: values.email,
+          teacherPositionsId: majorSelectState?.optionSelected,
+          degrees: degrees,
+        })
+        .then((data) => {
+          toast.success("Successfully created teacher", {
+            position: "top-center",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: false,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+        })
+        .catch((e) => {
+          console.log(e);
 
-        dob: values.dob,
-        phoneNumber: values.phoneNumber,
-        email: values.email,
-        teacherPositionsId: majorSelectState?.optionSelected,
-        degrees: degrees,
-      });
-setOpen(false)
+          toast.error(e.message + " Duplicate Email", {
+            position: "top-center",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: false,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+        });
       // return redirect("");
 
       // setSuccess(true);
@@ -107,6 +145,7 @@ setOpen(false)
                           }}
                         />
                       </div>
+
                       <div>
                         <DialogTitle
                           as="h3"
@@ -313,6 +352,13 @@ setOpen(false)
                           />
                         ) : null}{" "}
                       </div>
+                      <div className="ml-6 mt-6">
+                        <FileUploader
+                          handleChange={handleFileChange}
+                          name="file"
+                          types={fileTypes}
+                        />
+                      </div>
                     </div>
 
                     <div className="ml-10">
@@ -331,7 +377,8 @@ setOpen(false)
                             marginLeft: "70%",
                             marginTop: "6px",
                           }}
-                          onClick={() => {
+                          onClick={(e) => {
+                            e.preventDefault();
                             setTableData([
                               ...tableData,
                               {
@@ -373,6 +420,7 @@ setOpen(false)
                 </button>
               </div>
             </DialogPanel>
+            <ToastContainer />
           </div>
         </div>
       </form>

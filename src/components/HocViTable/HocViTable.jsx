@@ -18,12 +18,27 @@ const EditableTable = ({ tableData, setTableData, ...props }) => {
 
   const onInputChange = (key, index) => (e) => {
     const newData = [...tableData];
-    console.log(e.target.value);
 
     newData[index][key] = e.target.value;
     setTotal(newData, index);
     setTableData(newData);
-    console.log(tableData);
+  };
+  const onDeleteRow = (e, indexRow) => {
+    console.log(indexRow + 1);
+
+    const newData = tableData.filter((data, index) => {
+      return Number(index) !== Number(indexRow);
+    });
+    setTableData(newData);
+  };
+  const onCheckRow = (e, indexRow) => {
+    const newData = tableData.map((data, index) => {
+      if (Number(index) === Number(indexRow)) {
+        data["isChecked"] =true;
+      }
+      return data;
+    });
+    setTableData(newData);
   };
   const options = [
     { value: "chocolate", label: "Chocolate" },
@@ -57,7 +72,12 @@ const EditableTable = ({ tableData, setTableData, ...props }) => {
       title: "",
       render: (text, record, index) => (
         <>
-          <input type="checkbox" />
+          <input
+            type="checkbox"
+            onChange={(e) => {
+              onCheckRow(e, index);
+            }}
+          />
         </>
       ),
     },
@@ -65,7 +85,6 @@ const EditableTable = ({ tableData, setTableData, ...props }) => {
       dataIndex: "type",
       title: "Bậc",
       render: (text, record, index) => {
-        console.log(text);
         return (
           <select name="type" id="type" onChange={onInputChange("type", index)}>
             {levels.map((level) => {
@@ -108,19 +127,37 @@ const EditableTable = ({ tableData, setTableData, ...props }) => {
       ),
     },
     {
-      title: "Xóa",
-      render: (text, record, index) => <button>Delete</button>,
+      dataIndex: "delete",
+      title: "delete",
+      render: (text, record, index) => (
+        <button
+          style={{
+            border: "1px solid black",
+            padding: "8px",
+            height: "50%",
+            marginTop: "auto",
+            borderRadius: "5%",
+          }}
+          onClick={(e) => {
+            e.preventDefault();
+            onDeleteRow(e, index);
+          }}
+        >
+          Delete
+        </button>
+      ),
     },
   ];
 
   return (
-    <div style={{ padding: 20 }}>
+    <div className="flex" style={{ padding: 20 }}>
       <Table
         rowKey="id"
         columns={columns}
         dataSource={tableData}
         pagination={false}
       />
+
       <div className="action-btn"></div>
     </div>
   );

@@ -11,6 +11,7 @@ import ReactPaginate from "react-paginate";
 import CreateNewModal from "./components/CreateNewModal";
 import LeftTabPanel from "./components/LeftTabPanel";
 import CreateNewPositionModal from "./components/CreateNewPositionModal";
+import url from "./url";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -24,10 +25,10 @@ function App() {
   const [openPositionModal, setOpenPositionModal] = useState(false);
   const [loading, setLoading] = useState(true);
   const getTeacher = async () => {
-    const originalList = await axios.get(`https://b20a0af1-8c11-4b3b-87e5-99f86a03a2dc.us-east-1.cloud.genez.io/teachers`);
+    const originalList = await axios.get(`${url}/teachers`);
 
     const teacher = await axios.get(
-      `https://b20a0af1-8c11-4b3b-87e5-99f86a03a2dc.us-east-1.cloud.genez.io/teachers?limit=${itemsPerPage}&page=${currentPage}`
+      `${url}/teachers?limit=${itemsPerPage}&page=${currentPage}`
     );
     setPageCount(Math.ceil(originalList.data.data.length / itemsPerPage));
     setOrgList(originalList.data.data);
@@ -36,7 +37,7 @@ function App() {
   };
   const getTeacherPosition = async () => {
     const teacherPosition = await axios.get(
-      "https://b20a0af1-8c11-4b3b-87e5-99f86a03a2dc.us-east-1.cloud.genez.io/teachers-positions"
+      `${url}/teachers-positions`
     );
 
     setTeacherPositionList(teacherPosition.data.data);
@@ -48,7 +49,7 @@ function App() {
   useEffect(() => {
     const getTeacherByPage = async () => {
       const teacher = await axios.get(
-        `https://b20a0af1-8c11-4b3b-87e5-99f86a03a2dc.us-east-1.cloud.genez.io/teachers?limit=${itemsPerPage}&page=${currentPage}`
+        `${url}/teachers?limit=${itemsPerPage}&page=${currentPage}`
       );
       setTeacherList(teacher.data.data);
     };
